@@ -61,7 +61,7 @@ jobs:
         with:
           config: baseUrl=${{env.MSM_UI_URL}},pageLoadTimeout=100000
           install: false
-          start: yarn start
+          start: yarn dev
           spec: cypress/e2e/${{ matrix.groups }}/**/*.spec.ts
           wait-on: ${{env.MSM_UI_URL}}/sites/list
           working-directory: frontend
