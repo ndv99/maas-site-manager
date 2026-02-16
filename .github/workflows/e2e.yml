@@ -49,22 +49,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: frontend/.nvmrc
-      - name: Install Cypress
-        uses: cypress-io/github-action@v7
-        with:
-          runTests: false
-          install-command: yarn install
-          build: yarn build
-          working-directory: frontend
+      - name: Install dependencies
+        run: yarn install
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v7
-        with:
-          config: baseUrl=${{env.MSM_UI_URL}},pageLoadTimeout=100000
-          install: false
-          start: yarn dev
-          spec: cypress/e2e/${{ matrix.groups }}/**/*.spec.ts
-          wait-on: ${{env.MSM_UI_URL}}/sites/list
-          working-directory: frontend
+        run: yarn cypress-run
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
