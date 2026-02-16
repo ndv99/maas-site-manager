@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js from .nvmrc
