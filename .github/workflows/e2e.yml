@@ -30,3 +30,41 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+  cypress:
+    name: Cypress
+    runs-on: ubuntu-24.04
+    env:
+      VITE_USE_MOCK_DATA: true
+      MSM_UI_URL: http://localhost:8405
+    defaults:
+      run:
+        working-directory: frontend
+    strategy:
+      fail-fast: false
+      matrix:
+        groups: ["no-users", "with-users"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: frontend/.nvmrc
+      - name: Install Cypress
+        uses: cypress-io/github-action@v4
+        with:
+          runTests: false
+          install-command: yarn install
+          build: yarn build
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v4
+        with:
+          config: baseUrl=${{env.MSM_UI_URL}},pageLoadTimeout=100000
+          install: false
+          start: yarn start
+          spec: cypress/e2e/${{ matrix.groups }}/**/*.spec.ts
+          wait-on: ${{env.MSM_UI_URL}}/sites/list
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
