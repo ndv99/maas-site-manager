@@ -55,6 +55,7 @@ jobs:
           runTests: false
           install-command: yarn install
           build: yarn build
+          project: ./frontend
       - name: Run Cypress tests
         uses: cypress-io/github-action@v4
         with:
@@ -63,6 +64,7 @@ jobs:
           start: yarn start
           spec: cypress/e2e/${{ matrix.groups }}/**/*.spec.ts
           wait-on: ${{env.MSM_UI_URL}}/sites/list
+          project: ./frontend
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
